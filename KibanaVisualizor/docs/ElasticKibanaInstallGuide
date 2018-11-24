@@ -1,0 +1,28 @@
+## Install Docker Mac
+
+https://docs.docker.com/docker-for-mac/install/
+
+
+## Installing Kiaban and Elastic Search Using Docker
+
+docker pull nshou/elasticsearch-kibana
+docker run -d -p 9200:9200 -p 5601:5601 nshou/elasticsearch-kibana
+
+## Checking Running Containor
+docker ps
+
+CONTAINER ID        IMAGE                        COMMAND                  CREATED             STATUS              PORTS                                            NAMES
+bd77fcfbb480        nshou/elasticsearch-kibana   "/bin/sh -c 'sh elas…"   2 minutes ago       Up 2 minutes        0.0.0.0:5601->5601/tcp, 0.0.0.0:9200->9200/tcp   sleepy_ardinghelli
+
+
+
+Open your web browser and hit below URL
+
+Elastic Search URL
+
+``` http://localhost:9200 ```
+
+Kibana URL:
+
+```http://localhost:5601 ```
+
