@@ -20,6 +20,7 @@ import org.elasticsearch.common.xcontent.XContentType;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 public class ElasticSearchCode {
@@ -63,7 +64,7 @@ public class ElasticSearchCode {
 
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 
-		dataMap.put("name", geoLocation.getName());
+		dataMap.put("name", geoLocation.getSurgePrice());
 		dataMap.put("location", geoLocation.getLocation());
 
 		IndexRequest indexRequest = new IndexRequest(INDEX, TYPE, geoLocation.getGeoID())
@@ -123,7 +124,13 @@ public class ElasticSearchCode {
 
 		System.out.println("Inserting a new Person with name Shubham...");
 		GeoLocation geolocation = new GeoLocation();
-		geolocation.setName("Shubham");
+		Random r = new Random();
+		int low = 1;
+		int high = 10;
+		int result = r.nextInt(high-low) + low;
+		
+		geolocation.setSurgePrice(result);
+		//geolocation.setName("Shubham");
 		geolocation.setLocation(geoHash);
 
 		geolocation = insertGeoPosition(geolocation);

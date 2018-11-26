@@ -20,7 +20,7 @@ public class GeoHashGenerator
 
 	public static void main( String[] args )
 	{
-		String csvPathFile="/Users/shashi/Documents/Development/Interviews/Grab/data/train.csv";
+		String csvPathFile="/Users/shashi/Documents/Development/Interviews/Grab/data/test.csv";
 
 		//GeoHashGenerator 
 
@@ -49,16 +49,16 @@ public class GeoHashGenerator
 			{
 
 
-				if (i == 1000)
-					break;
+				//if (i == 1000)
+					//break;
 
 				// use comma as separator
 				String[] country = line.split(cvsSplitBy);
 
 				System.out.println("Longitude : " + country[6] + "  Lattitude : " + country[7] + "");
 
-				String longitude = country[6];
-				String lattitude = country[7];
+				String longitude = country[5];
+				String lattitude = country[6];
 
 				if (longitude.equalsIgnoreCase("pickup_latitude"))
 				{
@@ -118,8 +118,10 @@ public class GeoHashGenerator
 	static String geGeoHash(double logitude , double lattitude )
 	{
 
-		String geohashString = GeoHash.withCharacterPrecision(logitude , lattitude, 12).toBase32();
+		
+		String geohashString = GeoHash.withCharacterPrecision(logitude , lattitude, 6).toBase32();
 		return geohashString;
+		
 
 	}
 }

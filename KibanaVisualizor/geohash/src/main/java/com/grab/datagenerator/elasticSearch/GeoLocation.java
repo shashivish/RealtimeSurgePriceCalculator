@@ -3,24 +3,17 @@ package com.grab.datagenerator.elasticSearch;
 public class GeoLocation {
 
    
-    private String name;
+    
     private String location;
     private String geoID ;
+    private int surgePrice;
     
-    
 
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Override
     public String toString() {
-        return String.format("GeoPosition{name='%s', location='%s'}", name, location);
+        return String.format("GeoPosition{surgePrice='%s', location='%s'}", surgePrice, location);
     }
 
 	public String getLocation() {
@@ -37,5 +30,13 @@ public class GeoLocation {
 
 	public void setGeoID(String geoID) {
 		this.geoID = geoID;
+	}
+
+	public int getSurgePrice() {
+		return surgePrice;
+	}
+
+	public void setSurgePrice(int surgePrice) {
+		this.surgePrice = surgePrice;
 	}
 }
