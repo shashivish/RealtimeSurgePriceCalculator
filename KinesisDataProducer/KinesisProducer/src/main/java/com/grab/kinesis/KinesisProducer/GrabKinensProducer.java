@@ -48,7 +48,7 @@ public class GrabKinensProducer {
 			for (int i = 0; i < 100; ++i) {
 				ByteBuffer data = ByteBuffer.wrap("myData".getBytes("UTF-8"));
 				// doesn't block       
-				kinesis.addUserRecord("test1", "myParti1tionKey", data); 
+				kinesis.addUserRecord("test", "myParti1tionKey", data); 
 			}  
 			System.out.println("Producer Ended");
 		}
