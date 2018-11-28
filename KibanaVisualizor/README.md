@@ -1,4 +1,4 @@
-## Surge Price Calculator 
+# Surge Price Calculator 
 
 Surge price in taxi travel industry are introduced based on supply and demand ration.
 
@@ -12,6 +12,4 @@ This project contains three high level module for imlpementation.
 
 Contributors :
 	Shashi Vishwakarma
-	Vishal Mishra
-	Anurag Shukla
 

@@ -12,6 +12,4 @@ This project contains three high level module for imlpementation.
 
 Contributors :
 	Shashi Vishwakarma
-	Vishal Mishra
-	Anurag Shukla
 
