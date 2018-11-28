@@ -95,8 +95,19 @@ public class GrabKinesisWriter {
 		// Validate that the stream exists and is active
 		validateStream(kinesisClient, streamName);
 
+		for(int i =0; i < 10000000 ; i++ )
+		{
+			System.out.println("Record Number " + i+1);
+			sendGrabKinesisRecord("Hello Grab" ,kinesisClient ,streamName);
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-		sendGrabKinesisRecord("Hello Grab" ,kinesisClient ,streamName);
+		}
+
 
 
 	}
