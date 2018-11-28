@@ -49,12 +49,15 @@ public class GrabKinensProducer {
 		try
 		{
 			
-			GrabKinensProducer grabKinesisProvide =new GrabKinensProducer();
-
-			KinesisProducer kinesis =  grabKinesisProvide.getKinesisProducer();
+			GrabKinesisWriter grabKinesisWriter = new GrabKinesisWriter();
+			grabKinesisWriter.initKinesis(STREAM_NAME, REGION);
+			
+			//GrabKinensProducer grabKinesisProvide =new GrabKinensProducer();
+			//KinesisProducer kinesis =  grabKinesisProvide.getKinesisProducer();
 			
 			
-			AmazonKinesisClientBuilder clientBuilder = AmazonKinesisClientBuilder.standard();
+			
+			/*AmazonKinesisClientBuilder clientBuilder = AmazonKinesisClientBuilder.standard();
 	        
 			ClientConfiguration config = new ClientConfiguration();
 			
@@ -71,7 +74,7 @@ public class GrabKinensProducer {
 			ListStreamsResult listStreamsResult = client.listStreams(listStreamsRequest);
 			List<String> streamNames = listStreamsResult.getStreamNames();
 			
-			System.out.println("Strems Found ------------- " + streamNames.toString());
+			System.out.println("Strems Found ------------- " + streamNames.toString()); */
 			
 			
 			System.setProperty("aws.secretKey", "8RfmF4d7BCVy8r4qPWbU6rQJ0db2kL4cBiQ");
@@ -83,11 +86,11 @@ public class GrabKinensProducer {
 			
 			
 			// Put some records 
-			for (int i = 0; i < 100; ++i) {
+			/*for (int i = 0; i < 100; ++i) {
 				ByteBuffer data = ByteBuffer.wrap("myData".getBytes("UTF-8"));
 				// doesn't block       
 				kinesis.addUserRecord("test", "myParti1tionKey", data); 
-			}  
+			}  */
 			System.out.println("Producer Ended");
 		}
 		catch(Exception e)
@@ -102,7 +105,6 @@ public class GrabKinensProducer {
 	public static KinesisProducer getKinesisProducer() {
 
 		KinesisProducerConfiguration config = new KinesisProducerConfiguration();
-
 		
 		config.setRegion(REGION);
 
