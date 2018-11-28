@@ -1,8 +1,12 @@
 package com.grab.kinesis.KinesisProducer;
 
+import java.nio.ByteBuffer;
+
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.kinesis.AmazonKinesis;
 import com.amazonaws.services.kinesis.AmazonKinesisClientBuilder;
 import com.amazonaws.services.kinesis.model.DescribeStreamResult;
+import com.amazonaws.services.kinesis.model.PutRecordRequest;
 import com.amazonaws.services.kinesis.model.ResourceNotFoundException;
 
 public class GrabKinesisWriter {
@@ -29,27 +33,71 @@ public class GrabKinesisWriter {
 	}
 
 
+
+	private static void sendGrabKinesisRecord(String grabUserData, AmazonKinesis kinesisClient,
+			String streamName) {
+
+
+		//		for (int i = 0; i < 100; ++i) {
+		//			ByteBuffer data = ByteBuffer.wrap("myData".getBytes("UTF-8"));
+		//			// doesn't block       
+		//			kinesisClient.addUserRecord("test", "myParti1tionKey", data); 
+		//		}  
+
+
+		byte[] bytes = grabUserData.getBytes();
+
+		// The bytes could be null if there is an issue with the JSON serialization by the Jackson JSON library.
+		if (bytes == null) {
+			System.out.println( "Data is empty");
+			return;
+		}
+
+		//   LOG.info("Putting trade: " + trade.toString());
+		PutRecordRequest putRecord = new PutRecordRequest();
+		putRecord.setStreamName(streamName);
+		// We use the ticker symbol as the partition key, as explained in the tutorial.
+		putRecord.setPartitionKey("testKey");
+		putRecord.setData(ByteBuffer.wrap(bytes));
+
+		try {
+			kinesisClient.putRecord(putRecord);
+			System.out.println( "Data is written to Kinesis Stream");
+		} catch (AmazonClientException ex) {
+			ex.printStackTrace();
+			System.out.println("Failed to write in Kinesis Producer");
+
+
+		}
+	}
+
 	public void initKinesis(String streamName , String regionName)
 	{
 
 		AmazonKinesisClientBuilder clientBuilder = AmazonKinesisClientBuilder.standard();
 
 		clientBuilder.setRegion(regionName);
-		
+
 		try {
 			clientBuilder.setCredentials(CredentialUtils.getCredentialsProvider());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
+
 		clientBuilder.setClientConfiguration(ConfigurationUtils.getClientConfigWithUserAgent());
 
 		AmazonKinesis kinesisClient = clientBuilder.build();
 
+
+
 		// Validate that the stream exists and is active
 		validateStream(kinesisClient, streamName);
+
+
+		sendGrabKinesisRecord("Hello Grab" ,kinesisClient ,streamName);
+
 
 	}
 }
