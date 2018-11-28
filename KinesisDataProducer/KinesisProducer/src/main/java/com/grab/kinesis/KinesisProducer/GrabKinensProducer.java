@@ -38,7 +38,6 @@ public class GrabKinensProducer {
 	public static final String REGION = "eu-central-1";
 
 	public static void main(String args[]) throws UnsupportedEncodingException, GrabKinesisProducerException
-
 	{
 		String streamName = args[0];
 		String regionName = args[1];
@@ -48,7 +47,7 @@ public class GrabKinensProducer {
 		if(args.length != 3)
 		{
 			System.err.println("Invalid Number of Argument Provided : Usage GrabKinensProducer <STREAM_NAME>  <REGION NAME> <DRIVERCSVPATH>  <PASSANGERCVSPATH> ");
-
+			System.exit(1);
 		}
 
 		try

@@ -1,0 +1,12 @@
+com/amazonaws/services/kinesis/producer/sample/SampleProducer.class
+com/amazonaws/services/kinesis/producer/sample/SampleConsumer$RecordProcessor.class
+com/amazonaws/services/kinesis/producer/sample/SampleProducer$1.class
+com/amazonaws/services/kinesis/producer/sample/SampleConsumer.class
+com/amazonaws/services/kinesis/producer/sample/SampleConsumer$1.class
+com/amazonaws/services/kinesis/producer/sample/Utils.class
+com/amazonaws/services/kinesis/producer/sample/SampleProducer$4.class
+com/amazonaws/services/kinesis/producer/sample/SampleProducer$2.class
+com/amazonaws/services/kinesis/producer/sample/MetricsAwareSampleProducer.class
+com/amazonaws/services/kinesis/producer/sample/MetricsAwareSampleProducer$1.class
+com/amazonaws/services/kinesis/producer/sample/SampleProducer$3.class
+com/amazonaws/services/kinesis/producer/sample/MetricsAwareSampleProducer$2.class

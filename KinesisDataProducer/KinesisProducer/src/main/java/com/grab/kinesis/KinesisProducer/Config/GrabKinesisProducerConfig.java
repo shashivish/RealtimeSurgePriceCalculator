@@ -5,6 +5,7 @@ import com.amazonaws.services.kinesis.AmazonKinesis;
 import com.amazonaws.services.kinesis.AmazonKinesisClientBuilder;
 import com.amazonaws.services.kinesis.producer.KinesisProducer;
 import com.amazonaws.services.kinesis.producer.KinesisProducerConfiguration;
+import com.grab.kinesis.KinesisProducer.Exception.GrabKinesisProducerException;
 
 /**
  * Get Kinesis Producer Config
@@ -15,10 +16,15 @@ public class GrabKinesisProducerConfig {
 
 
 
-	public static AmazonKinesis getKinesisProducer(String regionName ) {
+	public AmazonKinesis getKinesisProducer(String regionName ) throws GrabKinesisProducerException {
 
 		AmazonKinesisClientBuilder clientBuilder = AmazonKinesisClientBuilder.standard();
 
+		if(regionName.equals(""))
+		{
+			throw new GrabKinesisProducerException("Region Name is not provided");
+
+		}
 		clientBuilder.setRegion(regionName);
 
 		try {
