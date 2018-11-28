@@ -1,19 +1,23 @@
 package com.grab.kinesis.KinesisProducer;
 
 import java.nio.ByteBuffer;
+import java.util.Random;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.kinesis.AmazonKinesis;
-import com.amazonaws.services.kinesis.AmazonKinesisClientBuilder;
 import com.amazonaws.services.kinesis.model.DescribeStreamResult;
 import com.amazonaws.services.kinesis.model.PutRecordRequest;
 import com.amazonaws.services.kinesis.model.ResourceNotFoundException;
+import com.grab.kinesis.KinesisProducer.Exception.GrabKinesisProducerException;
 
 public class GrabKinesisWriter {
 
 
 
-	private static void validateStream(AmazonKinesis kinesisClient, String streamName) {
+	private final Random random = new Random();
+
+
+	public  void validateStream(AmazonKinesis kinesisClient, String streamName) {
 		try {
 			DescribeStreamResult result = kinesisClient.describeStream(streamName);
 			System.out.println( "Stream Name " + streamName + "  Status  : " + result.getStreamDescription().getStreamStatus());
@@ -34,15 +38,8 @@ public class GrabKinesisWriter {
 
 
 
-	private static void sendGrabKinesisRecord(String grabUserData, AmazonKinesis kinesisClient,
-			String streamName) {
-
-
-		//		for (int i = 0; i < 100; ++i) {
-		//			ByteBuffer data = ByteBuffer.wrap("myData".getBytes("UTF-8"));
-		//			// doesn't block       
-		//			kinesisClient.addUserRecord("test", "myParti1tionKey", data); 
-		//		}  
+	public  void sendGrabKinesisRecord(String grabUserData, AmazonKinesis kinesisClient,
+			String streamName) throws GrabKinesisProducerException {
 
 
 		byte[] bytes = grabUserData.getBytes();
@@ -53,11 +50,11 @@ public class GrabKinesisWriter {
 			return;
 		}
 
-		//   LOG.info("Putting trade: " + trade.toString());
+		int randomInteger = random.nextInt();
+
 		PutRecordRequest putRecord = new PutRecordRequest();
 		putRecord.setStreamName(streamName);
-		// We use the ticker symbol as the partition key, as explained in the tutorial.
-		putRecord.setPartitionKey("testKey");
+		putRecord.setPartitionKey( String.valueOf(randomInteger) );
 		putRecord.setData(ByteBuffer.wrap(bytes));
 
 		try {
@@ -66,49 +63,10 @@ public class GrabKinesisWriter {
 		} catch (AmazonClientException ex) {
 			ex.printStackTrace();
 			System.out.println("Failed to write in Kinesis Producer");
-
+			throw new GrabKinesisProducerException("Failed to write in Kinesis Producer");
 
 		}
 	}
 
-	public void initKinesis(String streamName , String regionName)
-	{
 
-		AmazonKinesisClientBuilder clientBuilder = AmazonKinesisClientBuilder.standard();
-
-		clientBuilder.setRegion(regionName);
-
-		try {
-			clientBuilder.setCredentials(CredentialUtils.getCredentialsProvider());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
-		clientBuilder.setClientConfiguration(ConfigurationUtils.getClientConfigWithUserAgent());
-
-		AmazonKinesis kinesisClient = clientBuilder.build();
-
-
-
-		// Validate that the stream exists and is active
-		validateStream(kinesisClient, streamName);
-
-		for(int i =0; i < 10000000 ; i++ )
-		{
-			System.out.println("Record Number " + i+1);
-			sendGrabKinesisRecord("Hello Grab" ,kinesisClient ,streamName);
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-
-
-
-	}
 }

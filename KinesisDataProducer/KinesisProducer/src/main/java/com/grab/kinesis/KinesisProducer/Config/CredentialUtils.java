@@ -1,4 +1,4 @@
-package com.grab.kinesis.KinesisProducer;
+package com.grab.kinesis.KinesisProducer.Config;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 

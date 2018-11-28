@@ -1,17 +1,11 @@
 package com.grab.kinesis.KinesisProducer;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.util.List;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.kinesis.AmazonKinesis;
-import com.amazonaws.services.kinesis.AmazonKinesisClientBuilder;
-import com.amazonaws.services.kinesis.model.ListStreamsRequest;
-import com.amazonaws.services.kinesis.model.ListStreamsResult;
-import com.amazonaws.services.kinesis.producer.KinesisProducer;
-import com.amazonaws.services.kinesis.producer.KinesisProducerConfiguration;
+import com.grab.kinesis.KinesisProducer.Config.GrabKinesisProducerConfig;
+import com.grab.kinesis.KinesisProducer.Exception.GrabKinesisProducerException;
+import com.grab.kinesis.KinesisProducer.Helper.GrabKinesisDataGenerator;
 
 public class GrabKinensProducer {
 
@@ -43,86 +37,47 @@ public class GrabKinensProducer {
 	 */
 	public static final String REGION = "eu-central-1";
 
-	public static void main(String args[]) throws UnsupportedEncodingException
+	public static void main(String args[]) throws UnsupportedEncodingException, GrabKinesisProducerException
 
 	{
+		String streamName = args[0];
+		String regionName = args[1];
+		String driverCSVPath = args[2];
+
+
+		if(args.length != 3)
+		{
+			System.err.println("Invalid Number of Argument Provided : Usage GrabKinensProducer <STREAM_NAME>  <REGION NAME> <DRIVERCSVPATH>  <PASSANGERCVSPATH> ");
+
+		}
+
 		try
 		{
-			
-			GrabKinesisWriter grabKinesisWriter = new GrabKinesisWriter();
-			grabKinesisWriter.initKinesis(STREAM_NAME, REGION);
-			
-			//GrabKinensProducer grabKinesisProvide =new GrabKinensProducer();
-			//KinesisProducer kinesis =  grabKinesisProvide.getKinesisProducer();
-			
-			
-			
-			/*AmazonKinesisClientBuilder clientBuilder = AmazonKinesisClientBuilder.standard();
-	        
-			ClientConfiguration config = new ClientConfiguration();
-			
-			clientBuilder.setRegion(REGION);
-			clientBuilder.setCredentials(new DefaultAWSCredentialsProviderChain());
-			clientBuilder.setClientConfiguration(config);
-			
-						        
-			AmazonKinesis client = clientBuilder.build();
-			
-			
-			ListStreamsRequest listStreamsRequest = new ListStreamsRequest();
-			listStreamsRequest.setLimit(20); 
-			ListStreamsResult listStreamsResult = client.listStreams(listStreamsRequest);
-			List<String> streamNames = listStreamsResult.getStreamNames();
-			
-			System.out.println("Strems Found ------------- " + streamNames.toString()); */
-			
-			
-			System.setProperty("aws.secretKey", "8RfmF4d7BCVy8r4qPWbU6rQJ0db2kL4cBiQ");
-			System.setProperty("aws.accessKeyId", "AKIAJW6QNQBLPROZZDGQ");
 
-			System.out.println("Creatiing Connection");
+			/**
+			 * Create Grab Kinesis Producer Configuration
+			 */
+			GrabKinesisProducerConfig grabKinesisConfiguration = new GrabKinesisProducerConfig();
+			AmazonKinesis amazonKinesis = grabKinesisConfiguration.getKinesisProducer(regionName);
 
-			
-			
-			
-			// Put some records 
-			/*for (int i = 0; i < 100; ++i) {
-				ByteBuffer data = ByteBuffer.wrap("myData".getBytes("UTF-8"));
-				// doesn't block       
-				kinesis.addUserRecord("test", "myParti1tionKey", data); 
-			}  */
-			System.out.println("Producer Ended");
+
+			/**
+			 * Generate Data for Producer with Geo location
+			 */
+			GrabKinesisDataGenerator  grabKinesisGenerator = new GrabKinesisDataGenerator();
+			grabKinesisGenerator.postDriverData( streamName , driverCSVPath , amazonKinesis);
+
+
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();	
+			throw new GrabKinesisProducerException("Unable to write inot Grab Kinesis Producer");
 		}
 
 
 	}
 
 
-	public static KinesisProducer getKinesisProducer() {
 
-		KinesisProducerConfiguration config = new KinesisProducerConfiguration();
-		
-		config.setRegion(REGION);
-
-
-		config.setCredentialsProvider(new DefaultAWSCredentialsProviderChain());
-
-
-		config.setMaxConnections(1);
-
-
-		config.setRequestTimeout(60000);
-
-
-		config.setRecordMaxBufferedTime(15000);
-
-
-		KinesisProducer producer = new KinesisProducer(config);
-
-		return producer;
-	}
 }
