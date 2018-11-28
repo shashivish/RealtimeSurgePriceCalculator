@@ -2,8 +2,14 @@ package com.grab.kinesis.KinesisProducer;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.util.List;
 
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.services.kinesis.AmazonKinesis;
+import com.amazonaws.services.kinesis.AmazonKinesisClientBuilder;
+import com.amazonaws.services.kinesis.model.ListStreamsRequest;
+import com.amazonaws.services.kinesis.model.ListStreamsResult;
 import com.amazonaws.services.kinesis.producer.KinesisProducer;
 import com.amazonaws.services.kinesis.producer.KinesisProducerConfiguration;
 
@@ -42,15 +48,40 @@ public class GrabKinensProducer {
 	{
 		try
 		{
+			
+			GrabKinensProducer grabKinesisProvide =new GrabKinensProducer();
+
+			KinesisProducer kinesis =  grabKinesisProvide.getKinesisProducer();
+			
+			
+			AmazonKinesisClientBuilder clientBuilder = AmazonKinesisClientBuilder.standard();
+	        
+			ClientConfiguration config = new ClientConfiguration();
+			
+			clientBuilder.setRegion(REGION);
+			clientBuilder.setCredentials(new DefaultAWSCredentialsProviderChain());
+			clientBuilder.setClientConfiguration(config);
+			
+						        
+			AmazonKinesis client = clientBuilder.build();
+			
+			
+			ListStreamsRequest listStreamsRequest = new ListStreamsRequest();
+			listStreamsRequest.setLimit(20); 
+			ListStreamsResult listStreamsResult = client.listStreams(listStreamsRequest);
+			List<String> streamNames = listStreamsResult.getStreamNames();
+			
+			System.out.println("Strems Found ------------- " + streamNames.toString());
+			
+			
 			System.setProperty("aws.secretKey", "8RfmF4d7BCVy8r4qPWbU6rQJ0db2kL4cBiQ");
 			System.setProperty("aws.accessKeyId", "AKIAJW6QNQBLPROZZDGQ");
 
 			System.out.println("Creatiing Connection");
 
-			GrabKinensProducer grabKinesisProvide =new GrabKinensProducer();
-
-			KinesisProducer kinesis =  grabKinesisProvide.getKinesisProducer();
-
+			
+			
+			
 			// Put some records 
 			for (int i = 0; i < 100; ++i) {
 				ByteBuffer data = ByteBuffer.wrap("myData".getBytes("UTF-8"));
@@ -72,6 +103,7 @@ public class GrabKinensProducer {
 
 		KinesisProducerConfiguration config = new KinesisProducerConfiguration();
 
+		
 		config.setRegion(REGION);
 
 
