@@ -12,6 +12,7 @@ public class GrabKinesisWriter {
 	private static void validateStream(AmazonKinesis kinesisClient, String streamName) {
 		try {
 			DescribeStreamResult result = kinesisClient.describeStream(streamName);
+			System.out.println( "Stream Name " + streamName + "  Status  : " + result.getStreamDescription().getStreamStatus());
 			if(!"ACTIVE".equals(result.getStreamDescription().getStreamStatus())) {
 				System.err.println("Stream " + streamName + " is not active. Please wait a few moments and try again.");
 				System.exit(1);
