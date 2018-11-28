@@ -41,12 +41,13 @@ public class GrabKinensProducer {
 	{
 		String streamName = args[0];
 		String regionName = args[1];
-		String driverCSVPath = args[2];
+		String typeOfUser = args[2];
+		String driverCSVPath = args[3];
 
 
-		if(args.length != 3)
+		if(args.length != 4)
 		{
-			System.err.println("Invalid Number of Argument Provided : Usage GrabKinensProducer <STREAM_NAME>  <REGION NAME> <DRIVERCSVPATH>  <PASSANGERCVSPATH> ");
+			System.err.println("Invalid Number of Argument Provided : Usage GrabKinensProducer <STREAM_NAME>  <TYPE OF USER>  <REGION NAME> <DRIVERCSVPATH>  ");
 			System.exit(1);
 		}
 
@@ -64,7 +65,7 @@ public class GrabKinensProducer {
 			 * Generate Data for Producer with Geo location
 			 */
 			GrabKinesisDataGenerator  grabKinesisGenerator = new GrabKinesisDataGenerator();
-			grabKinesisGenerator.postDriverData( streamName , driverCSVPath , amazonKinesis);
+			grabKinesisGenerator.postDriverData(typeOfUser, streamName , driverCSVPath , amazonKinesis);
 
 
 		}

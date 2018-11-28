@@ -10,9 +10,17 @@ import com.grab.kinesis.KinesisProducer.Exception.GrabKinesisProducerException;
 
 public class GrabKinesisDataGenerator {
 
-	static String DRIVER="driver";
-	static String PASSANGER="pasanger";
-	public void postDriverData(String streamName , String driverCsvFilPath , AmazonKinesis kinesisClient) throws GrabKinesisProducerException, InterruptedException
+	/**
+	 * 
+	 * @param typeOfUser
+	 * @param streamName
+	 * @param driverCsvFilPath
+	 * @param kinesisClient
+	 * @throws GrabKinesisProducerException
+	 * @throws InterruptedException
+	 */
+
+	public void postDriverData(String typeOfUser, String streamName , String driverCsvFilPath , AmazonKinesis kinesisClient) throws GrabKinesisProducerException, InterruptedException
 	{
 		BufferedReader br = null;
 
@@ -35,13 +43,13 @@ public class GrabKinesisDataGenerator {
 			br = new BufferedReader(new FileReader(csvFile));
 			while ((grabUserData = br.readLine()) != null) 
 			{
-				grabUserData = DRIVER+"," + grabUserData;
-				
+				grabUserData = typeOfUser+"," + grabUserData;
+
 				System.out.println("Writing Data ");
 				System.out.println(grabUserData);
-				
+
 				grabKinesisWriter.sendGrabKinesisRecord(grabUserData, kinesisClient, streamName);
-				
+
 				Thread.sleep(200);
 			}
 
