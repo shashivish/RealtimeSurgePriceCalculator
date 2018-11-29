@@ -20,6 +20,9 @@ public class GrabKinesisDataGenerator {
 	 * @throws InterruptedException
 	 */
 
+	final static String DRIVER="driver";
+	final static String PASSANGER="passanger";
+
 	public void postDriverData(String typeOfUser, String streamName , String driverCsvFilPath , AmazonKinesis kinesisClient) throws GrabKinesisProducerException, InterruptedException
 	{
 		BufferedReader br = null;
@@ -28,6 +31,7 @@ public class GrabKinesisDataGenerator {
 		String grabUserData = "";
 		String cvsSplitBy = ",";
 		int i=0;
+		String grabUserDataToPost="";
 
 
 		GrabKinesisWriter grabKinesisWriter = new GrabKinesisWriter();
@@ -43,12 +47,25 @@ public class GrabKinesisDataGenerator {
 			br = new BufferedReader(new FileReader(csvFile));
 			while ((grabUserData = br.readLine()) != null) 
 			{
-				grabUserData = typeOfUser+"," + grabUserData;
+
+				String[] userDataElement = grabUserData.split(",");
+
+				if(DRIVER.equalsIgnoreCase(typeOfUser))
+				{
+					grabUserDataToPost = typeOfUser+"," + userDataElement[2]+","+userDataElement[4]+","+userDataElement[5];
+				}
+				else
+				{
+					if(PASSANGER.equalsIgnoreCase(typeOfUser))
+					{
+						grabUserDataToPost = typeOfUser+"," + userDataElement[2]+","+userDataElement[5]+","+userDataElement[6];
+					}
+				}
 
 				System.out.println("Writing Data ");
-				System.out.println(grabUserData);
+				System.out.println(grabUserDataToPost);
 
-				grabKinesisWriter.sendGrabKinesisRecord(grabUserData, kinesisClient, streamName);
+				grabKinesisWriter.sendGrabKinesisRecord(grabUserDataToPost, kinesisClient, streamName);
 
 				Thread.sleep(200);
 			}
