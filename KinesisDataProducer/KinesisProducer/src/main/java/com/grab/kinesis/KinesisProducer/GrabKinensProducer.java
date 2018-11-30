@@ -39,17 +39,22 @@ public class GrabKinensProducer {
 
 	public static void main(String args[]) throws UnsupportedEncodingException, GrabKinesisProducerException
 	{
-		String streamName = args[0];
-		String regionName = args[1];
-		String typeOfUser = args[2];
-		String driverCSVPath = args[3];
-
 
 		if(args.length != 4)
 		{
 			System.err.println("Invalid Number of Argument Provided : Usage GrabKinensProducer <STREAM_NAME>  <TYPE OF USER>  <REGION NAME> <DRIVERCSVPATH>  ");
 			System.exit(1);
 		}
+
+		String streamName = args[0];
+		String regionName = args[1];
+		String typeOfUser = args[2];
+		String driverCSVPath = args[3];
+
+		//String streamName = "test";
+		//String regionName = "eu-central-1";
+		//String typeOfUser = "driver";
+		//String driverCSVPath = "/Users/shashi/Documents/Development/Interviews/Grab/data/driver.csv";
 
 		try
 		{

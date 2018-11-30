@@ -37,6 +37,7 @@ public class GrabKinesisDataGenerator {
 	 * @throws InterruptedException
 	 */
 
+	@SuppressWarnings("resource")
 	public void postDriverData(String typeOfUser, String streamName , String driverCsvFilPath , AmazonKinesis kinesisClient) throws GrabKinesisProducerException, InterruptedException
 	{
 		BufferedReader br = null;
@@ -53,7 +54,7 @@ public class GrabKinesisDataGenerator {
 		/**
 		 * Validate Stream if it is valid
 		 */
-		grabKinesisWriter.validateStream(kinesisClient, streamName);
+		//grabKinesisWriter.validateStream(kinesisClient, streamName);
 
 		try 
 		{
@@ -61,6 +62,12 @@ public class GrabKinesisDataGenerator {
 			br = new BufferedReader(new FileReader(csvFile));
 			while ((grabUserData = br.readLine()) != null) 
 			{
+
+				if (grabUserData.contains("pickup_longitude"))
+				{
+					System.out.println("Skipping Header Row");
+					continue;
+				}
 
 				String[] userDataElement = grabUserData.split(",");
 
@@ -71,6 +78,8 @@ public class GrabKinesisDataGenerator {
 				{
 
 					String geoHash = geoHashGenerator.geGeoHash(Double.parseDouble(userDataElement[4]), Double.parseDouble(userDataElement[5]));
+					System.out.println("Generated GeoHash " + geoHash);
+
 					grabUserDataToPost = typeOfUser+"," + userDataElement[2]+","+geoHash;
 				}
 				else
@@ -81,6 +90,7 @@ public class GrabKinesisDataGenerator {
 					if(PASSANGER.equalsIgnoreCase(typeOfUser))
 					{
 						String geoHash = geoHashGenerator.geGeoHash(Double.parseDouble(userDataElement[5]), Double.parseDouble(userDataElement[6]));
+						System.out.println("Generated GeoHash " + geoHash);
 						grabUserDataToPost = typeOfUser+"," + userDataElement[2]+","+userDataElement[5]+","+userDataElement[6];
 					}
 				}
@@ -88,7 +98,7 @@ public class GrabKinesisDataGenerator {
 				System.out.println("Writing Data ");
 				System.out.println(grabUserDataToPost);
 
-				grabKinesisWriter.sendGrabKinesisRecord(grabUserDataToPost, kinesisClient, streamName);
+				//	grabKinesisWriter.sendGrabKinesisRecord(grabUserDataToPost, kinesisClient, streamName);
 
 				Thread.sleep(200);
 			}
