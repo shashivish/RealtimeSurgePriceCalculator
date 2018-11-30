@@ -53,8 +53,8 @@ public class GrabKinensProducer {
 
 		//String streamName = "test";
 		//String regionName = "eu-central-1";
-		//String typeOfUser = "driver";
-		//String driverCSVPath = "/Users/shashi/Documents/Development/Interviews/Grab/data/driver.csv";
+		//String typeOfUser = "passenger";
+		//String driverCSVPath = "/Users/shashi/Documents/Development/Interviews/Grab/data/passanger.csv";
 
 		try
 		{

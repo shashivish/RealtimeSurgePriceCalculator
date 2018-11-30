@@ -21,7 +21,7 @@ public class GrabKinesisDataGenerator {
 	 */
 
 	final static String DRIVER="driver";
-	final static String PASSANGER="passanger";
+	final static String PASSANGER="passenger";
 
 	GrabKinesisWriter grabKinesisWriter ;
 	GeoHashGenerator geoHashGenerator ;
@@ -91,7 +91,11 @@ public class GrabKinesisDataGenerator {
 					{
 						String geoHash = geoHashGenerator.geGeoHash(Double.parseDouble(userDataElement[5]), Double.parseDouble(userDataElement[6]));
 						System.out.println("Generated GeoHash " + geoHash);
-						grabUserDataToPost = typeOfUser+"," + userDataElement[2]+","+userDataElement[5]+","+userDataElement[6];
+						grabUserDataToPost = typeOfUser+"," + userDataElement[2]+","+geoHash;
+					}
+					else
+					{
+						throw new GrabKinesisProducerException("No Valid User Type Found . Please Check Input");
 					}
 				}
 
