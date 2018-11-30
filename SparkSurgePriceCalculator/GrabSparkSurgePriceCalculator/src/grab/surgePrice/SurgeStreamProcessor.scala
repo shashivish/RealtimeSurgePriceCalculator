@@ -19,6 +19,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.SaveMode.Append
 import org.elasticsearch.spark.sql._
+import org.apache.spark.sql.SQLContext
 
 
 /**
@@ -81,7 +82,7 @@ class SurgeStreamProcessor {
 		    val unionStreams = ssc.union(kinesisStreams)
 
 				//Schema of the incoming data on Kinesis Stream
-				val schemaString = \"typeOfUser,pickup_datetime,pickup_langitude,pickup_lattitude"
+				val schemaString = "typeOfUser,pickup_datetime,pickup_langitude,pickup_lattitude"
 
 
 				//Parse the data
@@ -90,24 +91,31 @@ class SurgeStreamProcessor {
 
 				//Processing each RDD and storing it in temporary table
 				unionStreams.foreachRDD ((rdd: RDD[Array[Byte]], time: Time) => {
-					val rowRDD = rdd.map(w => Row.fromSeq(new String(w).split(\",")))				
-							val wordsDF = sqlContext.createDataFrame(rowRDD,tableSchema)
-							wordsDF.registerTempTable("realTimeDriverPassangerData")
+				  
+					    val rowRDD = rdd.map(w => Row.fromSeq(new String(w).split(",")))				
+					
+					    val wordsDF = sqlContext.createDataFrame(rowRDD,tableSchema)
+							
+					    wordsDF.registerTempTable("realTimeDriverPassangerData")
 
 							val surgePriceResult = "select geoHash , case when passangerCoutInGeoHashfrom > driverCoutInGeoHash then passangerCoutInGeoHashfrom/driverCoutInGeoHash else '0' END AS surgePrice from " 
 									+ " ((select geoHash , count(*) AS driverCoutInGeoHash from driverPassangerStream group by geoHash where typeOfUser ='driver') D "
 									+ "  inner join  "
 									+ "(select geoHash , count(*)  AS passangerCoutInGeoHashfrom driverPassangerStream group by geoHash where typeOfUser ='passanger') P ) on D.geoHash=P.geoHash )"
-
-							val surgePriceResultRDD: RDD[Row] = surgePriceResult.rdd
+							
+							surgePriceResultDF = sqlContext.sql(surgePriceResult)
+									
+							val surgePriceResultRDD: RDD[Row] = surgePriceResultDF.rdd
 
 							surgePriceResultRDD.saveToEs("gyms/gym")
 
 
 				}
 
+			
 				ssc.start()
 				ssc.awaitTerminationOrTimeout(batchIntervalSeconds * 5 * 1000)
 
 
 	}
+}
