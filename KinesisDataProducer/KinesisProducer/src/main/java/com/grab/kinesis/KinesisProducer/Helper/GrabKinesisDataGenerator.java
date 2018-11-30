@@ -23,6 +23,20 @@ public class GrabKinesisDataGenerator {
 	final static String DRIVER="driver";
 	final static String PASSANGER="passanger";
 
+	GrabKinesisWriter grabKinesisWriter ;
+	GeoHashGenerator geoHashGenerator ;
+
+
+	/**
+	 * 
+	 * @param typeOfUser
+	 * @param streamName
+	 * @param driverCsvFilPath
+	 * @param kinesisClient
+	 * @throws GrabKinesisProducerException
+	 * @throws InterruptedException
+	 */
+
 	public void postDriverData(String typeOfUser, String streamName , String driverCsvFilPath , AmazonKinesis kinesisClient) throws GrabKinesisProducerException, InterruptedException
 	{
 		BufferedReader br = null;
@@ -33,8 +47,8 @@ public class GrabKinesisDataGenerator {
 		int i=0;
 		String grabUserDataToPost="";
 
-
-		GrabKinesisWriter grabKinesisWriter = new GrabKinesisWriter();
+		grabKinesisWriter = new GrabKinesisWriter();
+		geoHashGenerator = new GeoHashGenerator();
 
 		/**
 		 * Validate Stream if it is valid
@@ -50,14 +64,23 @@ public class GrabKinesisDataGenerator {
 
 				String[] userDataElement = grabUserData.split(",");
 
+				/**
+				 * Send if Type is Driver
+				 */
 				if(DRIVER.equalsIgnoreCase(typeOfUser))
 				{
-					grabUserDataToPost = typeOfUser+"," + userDataElement[2]+","+userDataElement[4]+","+userDataElement[5];
+
+					String geoHash = geoHashGenerator.geGeoHash(Double.parseDouble(userDataElement[4]), Double.parseDouble(userDataElement[5]));
+					grabUserDataToPost = typeOfUser+"," + userDataElement[2]+","+geoHash;
 				}
 				else
 				{
+					/**
+					 * Send if Type if Passanger
+					 */
 					if(PASSANGER.equalsIgnoreCase(typeOfUser))
 					{
+						String geoHash = geoHashGenerator.geGeoHash(Double.parseDouble(userDataElement[5]), Double.parseDouble(userDataElement[6]));
 						grabUserDataToPost = typeOfUser+"," + userDataElement[2]+","+userDataElement[5]+","+userDataElement[6];
 					}
 				}
@@ -73,6 +96,7 @@ public class GrabKinesisDataGenerator {
 		}
 		catch (IOException e) {
 			e.printStackTrace();
+			throw new GrabKinesisProducerException("Unable to post message to Kinessi " + e.getMessage());
 		}
 	}
 
