@@ -100,13 +100,18 @@ object SparkStreamingGrabSurgePriceCalculator {
 				unionStreams.foreachRDD ((rdd: RDD[Array[Byte]]) => {
 					    val sc = rdd.context
 							val sqlContext = new SQLContext(sc)
-				  		val rowRDD = rdd.map(w => Row.fromSeq(new String(w).split(",")))				
+				  		val rowRDD = rdd.map(w => Row.fromSeq(new String(w).split(",")))	
+				  		
+				  		println("Printing Data  " + rowRDD.count())
+				  		
 							val wordsDF = sqlContext.createDataFrame(rowRDD,tableSchema)
 							wordsDF.registerTempTable("realTimeDriverPassangerData")
 
 							val surgePriceResult = "select geoHash , case when passangerCoutInGeoHashfrom > driverCoutInGeoHash then passangerCoutInGeoHashfrom/driverCoutInGeoHash else '0' END AS surgePrice from ((select geoHash , count(*) AS driverCoutInGeoHash from driverPassangerStream group by geoHash where typeOfUser ='driver') D inner join (select geoHash , count(*)  AS passangerCoutInGeoHashfrom driverPassangerStream group by geoHash where typeOfUser ='passanger') P ) on D.geoHash=P.geoHash ) "
 						
 							val surgePriceResultDF = sqlContext.sql(surgePriceResult)
+							
+							println("Printing Query Result " + surgePriceResultDF)
 							
 							val surgePriceResultRDD: RDD[Row] = surgePriceResultDF.rdd
 						
