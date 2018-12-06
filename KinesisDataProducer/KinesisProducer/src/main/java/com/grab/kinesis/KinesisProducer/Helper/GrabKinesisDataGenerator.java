@@ -102,7 +102,7 @@ public class GrabKinesisDataGenerator {
 				System.out.println("Writing Data ");
 				System.out.println(grabUserDataToPost);
 
-				//	grabKinesisWriter.sendGrabKinesisRecord(grabUserDataToPost, kinesisClient, streamName);
+				grabKinesisWriter.sendGrabKinesisRecord(grabUserDataToPost, kinesisClient, streamName);
 
 				Thread.sleep(200);
 			}
