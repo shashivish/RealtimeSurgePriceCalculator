@@ -35,17 +35,17 @@ import org.elasticsearch.spark.rdd.EsSpark
 object SparkStreamingGrabSurgePriceCalculator {
 	def main(args: Array[String]) {
 
-		if (args.length < 2) {
-			System.err.println("")
+		/*if (args.length < 2) {
+			System.err.println("Usage : ")
 			System.exit(1)
-		}
+		}*/
 
 
 		/**
 		 * Kinesis Connection Configuration
 		 */
 
-		val endpointUrl = "https://kinesis.eu-central-1.amazonaws.com"
+		    val endpointUrl = "https://kinesis.eu-central-1.amazonaws.com"
 				val streamName = "test"
 
 				val credentials = new DefaultAWSCredentialsProviderChain().getCredentials()
@@ -66,7 +66,7 @@ object SparkStreamingGrabSurgePriceCalculator {
 				 * Spark Streaming Configuration
 				 */
 
-				val sparkConfig = new SparkConf().setMaster("local[2]").setAppName("SparkStreamingGrabSurgePriceCalculator")
+				val sparkConfig = new SparkConf().setAppName("SparkStreamingGrabSurgePriceCalculator")
 
 				/**
 				 * Elastic Search Configuration
