@@ -4,17 +4,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>spark-streaming-simple-example</groupId>
-	<artifactId>spark-streaming-simple-example</artifactId>
+	<groupId>SparkSurgePriceCalculator</groupId>
+	<artifactId>SparkSurgePriceCalculator</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Spark Streaming Examples</name>
+	<name>Spark Streaming Grab Processor</name>
 
 	<properties>
-		<app.main.class>spark-streaming-simple-example.SparkKMeansApp</app.main.class>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
 		<aws.kinesis.client.version>1.4.0</aws.kinesis.client.version>
 		<aws.kinesis.producer.version>0.10.1</aws.kinesis.producer.version>
 		<spark.core.version>2.2.2</spark.core.version>

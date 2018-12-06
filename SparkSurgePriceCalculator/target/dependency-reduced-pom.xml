@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>spark-streaming-simple-example</groupId>
-  <artifactId>spark-streaming-simple-example</artifactId>
-  <name>Spark Streaming Examples</name>
+  <groupId>SparkSurgePriceCalculator</groupId>
+  <artifactId>SparkSurgePriceCalculator</artifactId>
+  <name>Spark Streaming Grab Processor</name>
   <version>0.1-SNAPSHOT</version>
   <build>
     <pluginManagement>
@@ -289,15 +289,14 @@
     </dependency>
   </dependencies>
   <properties>
-    <aws.kinesis.client.version>1.4.0</aws.kinesis.client.version>
-    <slf4j.version>1.7.5</slf4j.version>
-    <guava.version>13.0.1</guava.version>
-    <aws.kinesis.producer.version>0.10.1</aws.kinesis.producer.version>
-    <app.main.class>spark-streaming-simple-example.SparkKMeansApp</app.main.class>
-    <gson.version>2.2.4</gson.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spark.core.version>2.2.2</spark.core.version>
+    <gson.version>2.2.4</gson.version>
     <scala.version>2.11</scala.version>
+    <guava.version>13.0.1</guava.version>
+    <slf4j.version>1.7.5</slf4j.version>
+    <aws.kinesis.producer.version>0.10.1</aws.kinesis.producer.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <aws.kinesis.client.version>1.4.0</aws.kinesis.client.version>
   </properties>
 </project>
 
