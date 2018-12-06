@@ -59,8 +59,8 @@ object SparkStreamingGrabSurgePriceCalculator {
 				val numStreams = numShards
 				val batchInterval = Seconds(10)
 				val kinesisCheckpointInterval = batchInterval
-				val regionName = RegionUtils.getRegionByEndpoint(endpointUrl).getName()
-
+				//val regionName = RegionUtils.getRegionByEndpoint(endpointUrl).getName()
+				val regionName = "eu-central-1"
 
 				/**
 				 * Spark Streaming Configuration
