@@ -105,18 +105,21 @@ object SparkStreamingGrabSurgePriceCalculator {
 				  		println("Printing Data  " + rowRDD.count())
 				  		
 							val wordsDF = sqlContext.createDataFrame(rowRDD,tableSchema)
-							wordsDF.registerTempTable("realTimeDriverPassangerData")
+							wordsDF.registerTempTable("driverpassangerstream")
 
-							val surgePriceResult =  "select * from realTimeDriverPassangerData limit 10"
+							
+							val surgePriceResult =  "select * from driverpassangerstream limit 10"
 							//val surgePriceResult = "select geoHash , case when passangerCoutInGeoHashfrom > driverCoutInGeoHash then passangerCoutInGeoHashfrom/driverCoutInGeoHash else '0' END AS surgePrice from ((select geoHash , count(*) AS driverCoutInGeoHash from driverPassangerStream group by geoHash where typeOfUser ='driver') D inner join (select geoHash , count(*)  AS passangerCoutInGeoHashfrom driverPassangerStream group by geoHash where typeOfUser ='passanger') P ) on D.geoHash=P.geoHash ) "
 						
 							val surgePriceResultDF = sqlContext.sql(surgePriceResult)
 							
-							println("Printing Query Result " + surgePriceResultDF)
+							println("=================================================================")
+							println("Printing Query Result " + surgePriceResultDF.show())
+							println("=================================================================")
 							
 							val surgePriceResultRDD: RDD[Row] = surgePriceResultDF.rdd
 						
-							EsSpark.saveToEs(surgePriceResultRDD, "gyms/gym")
+						//	EsSpark.saveToEs(surgePriceResultRDD, "gyms/gym")
 						
 				})
 
